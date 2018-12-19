@@ -169,29 +169,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="一：点击事件"><a href="#一：点击事件" class="headerlink" title="一：点击事件"></a>一：点击事件</h3><blockquote>
-<h3 id="View"><a href="#View" class="headerlink" title="View"></a><a href="https://vue-native.io/docs/basic-components.html#View" target="_blank" rel="noopener">View</a></h3><p>The most fundamental component for building a UI, View is a container that supports layout<br><code>View</code> is designed to be nested inside other views and can have 0 to many children of any type.</p>
-</blockquote>
-<p>构建UI的最基本组件是View，它是一个支持布局的容器，它<br><code>View</code>被设计为嵌套在其他视图中，并且可以包含0到多个任何类型的子元素</p>
-<blockquote>
-<h3 id="Text"><a href="#Text" class="headerlink" title="Text"></a><a href="https://vue-native.io/docs/basic-components.html#Text" target="_blank" rel="noopener">Text</a></h3><p>A Vue Native component for displaying text.</p>
-<p>Text supports nesting, styling, and touch handling.</p>
-</blockquote>
-<p>用于显示文本的Vue Native组件。文本支持嵌套，样式和触摸处理。</p>
-<p>由此可见，<strong>view</strong>标签不支持触摸处理，只作为支持布局的容器；而<strong>text</strong>标签是行内元素，如果需要添加点击事件的元素的是块状元素，就要使用以下标签</p>
-<blockquote>
-<h3 id="TouchableOpacity"><a href="#TouchableOpacity" class="headerlink" title="TouchableOpacity"></a><a href="https://vue-native.io/docs/basic-components.html#TouchableOpacity" target="_blank" rel="noopener">TouchableOpacity</a></h3><p>A wrapper for making views respond properly to touches. On press down, the opacity of the wrapped view is decreased, dimming it.</p>
-</blockquote>
-<p>用于使视图正确响应触摸的包装器。按下时，包裹视图的不透明度会降低，使其变暗</p>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;touchable-opacity :on-press=&quot;onPressButton&quot;&gt;</span><br><span class="line">      &lt;image</span><br><span class="line">        :style=&quot;&#123;alignItems: &apos;center&apos;, backgroundColor: &apos;#DDDDDD&apos;&#125;&quot;</span><br><span class="line">        :source=&quot;&#123;require(&apos;./myButton.png&apos;)&#125;&quot; </span><br><span class="line">      /&gt;</span><br><span class="line">    &lt;/touchable-opacity&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="二：事件传参"><a href="#二：事件传参" class="headerlink" title="二：事件传参"></a>二：事件传参</h3><p>主要分两类：</p>
-<p>第一类：例如事件触发时无回参的点击事件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;TouchableOpacity :on-press=&apos;()=&gt;&#123;checkProposal(item)&#125;&apos;&gt;&lt;/TouchableOpacity&gt;</span><br></pre></td></tr></table></figure>
-<p>第二类：例如事件触发时有回参的滚动监听事件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> &lt;ScrollView :on-scroll=&apos;(e)=&gt;&#123;scrollHandler(e)&#125;&apos;&gt;&lt;/ScrollView&gt;</span><br><span class="line"></span><br><span class="line">methods:&#123;</span><br><span class="line">    scrollHandler(e)&#123;</span><br><span class="line">		// 这样才能获取到数据，直接输入e时没有响应的，一开始我是懵逼的，后面用了Object.keys(e)查看有哪些值，然后试出来了</span><br><span class="line">		console.log(e.nativeEvent)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最后我发现到<a href="https://facebook.github.io/react-native/docs/getting-started" target="_blank" rel="noopener">react-native</a> 找到对应标签去查看它的方法就可以知道回参是什么格式 😂</p>
-
+        <h3 id="一：点击事件"><a href="#一：点击事件" class="headerlink" title="一：点击事件"></a>一：点击事件</h3>
+        
+          <a class="article-more-a" href="/2018/12/19/vue-native踩坑记录3/#more">more >></a>
+        
       
 
       
