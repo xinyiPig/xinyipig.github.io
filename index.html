@@ -149,6 +149,112 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-vue-native踩坑记录3" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/vue-native踩坑记录3/">vue-native踩坑记录3</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/19/vue-native踩坑记录3/" class="archive-article-date">
+  	<time datetime="2018-12-19T09:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一：点击事件"><a href="#一：点击事件" class="headerlink" title="一：点击事件"></a>一：点击事件</h3><blockquote>
+<h3 id="View"><a href="#View" class="headerlink" title="View"></a><a href="https://vue-native.io/docs/basic-components.html#View" target="_blank" rel="noopener">View</a></h3><p>The most fundamental component for building a UI, View is a container that supports layout<br><code>View</code> is designed to be nested inside other views and can have 0 to many children of any type.</p>
+</blockquote>
+<p>构建UI的最基本组件是View，它是一个支持布局的容器，它<br><code>View</code>被设计为嵌套在其他视图中，并且可以包含0到多个任何类型的子元素</p>
+<blockquote>
+<h3 id="Text"><a href="#Text" class="headerlink" title="Text"></a><a href="https://vue-native.io/docs/basic-components.html#Text" target="_blank" rel="noopener">Text</a></h3><p>A Vue Native component for displaying text.</p>
+<p>Text supports nesting, styling, and touch handling.</p>
+</blockquote>
+<p>用于显示文本的Vue Native组件。文本支持嵌套，样式和触摸处理。</p>
+<p>由此可见，<strong>view</strong>标签不支持触摸处理，只作为支持布局的容器；而<strong>text</strong>标签是行内元素，如果需要添加点击事件的元素的是块状元素，就要使用以下标签</p>
+<blockquote>
+<h3 id="TouchableOpacity"><a href="#TouchableOpacity" class="headerlink" title="TouchableOpacity"></a><a href="https://vue-native.io/docs/basic-components.html#TouchableOpacity" target="_blank" rel="noopener">TouchableOpacity</a></h3><p>A wrapper for making views respond properly to touches. On press down, the opacity of the wrapped view is decreased, dimming it.</p>
+</blockquote>
+<p>用于使视图正确响应触摸的包装器。按下时，包裹视图的不透明度会降低，使其变暗</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;touchable-opacity :on-press=&quot;onPressButton&quot;&gt;</span><br><span class="line">      &lt;image</span><br><span class="line">        :style=&quot;&#123;alignItems: &apos;center&apos;, backgroundColor: &apos;#DDDDDD&apos;&#125;&quot;</span><br><span class="line">        :source=&quot;&#123;require(&apos;./myButton.png&apos;)&#125;&quot; </span><br><span class="line">      /&gt;</span><br><span class="line">    &lt;/touchable-opacity&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="二：事件传参"><a href="#二：事件传参" class="headerlink" title="二：事件传参"></a>二：事件传参</h3><p>主要分两类：</p>
+<p>第一类：例如事件触发时无回参的点击事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;TouchableOpacity :on-press=&apos;()=&gt;&#123;checkProposal(item)&#125;&apos;&gt;&lt;/TouchableOpacity&gt;</span><br></pre></td></tr></table></figure>
+<p>第二类：例如事件触发时有回参的滚动监听事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> &lt;ScrollView :on-scroll=&apos;(e)=&gt;&#123;scrollHandler(e)&#125;&apos;&gt;&lt;/ScrollView&gt;</span><br><span class="line"></span><br><span class="line">methods:&#123;</span><br><span class="line">    scrollHandler(e)&#123;</span><br><span class="line">		// 这样才能获取到数据，直接输入e时没有响应的，一开始我是懵逼的，后面用了Object.keys(e)查看有哪些值，然后试出来了</span><br><span class="line">		console.log(e.nativeEvent)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后我发现到<a href="https://facebook.github.io/react-native/docs/getting-started" target="_blank" rel="noopener">react-native</a> 找到对应标签去查看它的方法就可以知道回参是什么格式 😂</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">vue-native app</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/vue-native//" class="article-tag-list-link color1">vue-native</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/19/vue-native踩坑记录3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-vue-native踩坑记录2" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -172,26 +278,9 @@
         <h3 id="第一点："><a href="#第一点：" class="headerlink" title="第一点："></a>第一点：</h3><p>加载图片资源时，<strong>图片名字不能包含‘@’,</strong>如果报错类似为：</p>
 <p>Unable to resolve ../img/login/loginillustration@.png” from “.//components/login.vue<code>: The module</code>../img/login/loginillustration@.png` could not be found”</p>
 <p>一般就是名字含有特殊字符，它加载不了；</p>
-<h3 id="第二点："><a href="#第二点：" class="headerlink" title="第二点："></a>第二点：</h3><p>要吐血了</p>
-<blockquote>
-<p>Flexbox works the same way in React Native as it does in CSS on the web, with a few exceptions. The defaults are different, with flexDirection defaulting to column instead of row, and the flex parameter only supporting a single number.</p>
-</blockquote>
-<p>意思就是：<strong>Flexbox在React Native中的工作方式与在Web上的CSS中的工作方式相同，但有一些例外。 默认值不同，<span style="color:red">flexDirection默认为列而不是行</span>，flex参数仅支持单个数字</strong>。</p>
-<p>之前一直都是在某个单页上踩坑，碰巧今天做到了页面跳转，所以总结一下有关页面跳转的问题</p>
-<h3 id="第三点："><a href="#第三点：" class="headerlink" title="第三点："></a>第三点：</h3><h4 id="路由配置"><a href="#路由配置" class="headerlink" title="路由配置"></a>路由配置</h4><p>首先，准备好login.vue，index.vue两个单页，以及主页App.vue</p>
-<p><strong>App.vue</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;!-- container 的宽高必须要<span class="number">100</span>% 不然不显示，页面一片空白 --&gt;</span><br><span class="line">  &lt;view &gt;</span><br><span class="line">    &lt;!-- 组件，在components中注册了 --&gt;</span><br><span class="line">    &lt;app-navigation&gt;&lt;/app-navigation&gt;</span><br><span class="line">  &lt;/view&gt;</span><br><span class="line">&lt;<span class="regexp">/template&gt;</span></span><br><span class="line"><span class="regexp">&lt;script&gt;</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/  要使用路由有一下几点需要注意：</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 1：先安装react-navigation cnpm run react-navigation --save</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 2:安装：cnpm install vue-native-router</span></span><br><span class="line"><span class="regexp">import &#123; StackNavigator &#125; from "vue-native-router";</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 为什么需要引入React?这不是vue-native吗，其实https:/</span><span class="regexp">/vue-native.io 官方文档有说明哦，他其实就是vue转react-native,所以在有一些功能是需要引入react-native相关依赖库</span></span><br><span class="line"><span class="regexp">import React from 'react';</span></span><br><span class="line"><span class="regexp">import &#123; Button &#125; from 'react-native';</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 登录页</span></span><br><span class="line"><span class="regexp">import login from "./</span>components/login<span class="string">";</span></span><br><span class="line"><span class="string">// 首页</span></span><br><span class="line"><span class="string">import index from "</span>./components/index<span class="string">";</span></span><br><span class="line"><span class="string">// 以下开始设置路由，跟vue的路由区别还是有点大，所以我在这卡了不少时间</span></span><br><span class="line"><span class="string">const AppNavigation = StackNavigator(</span></span><br><span class="line"><span class="string">  &#123;</span></span><br><span class="line"><span class="string">    // 第一种方式,这种是最简单的，但是你用了以后会发现标题栏少了点东西，没错，就是标题</span></span><br><span class="line"><span class="string">    // Login:login,</span></span><br><span class="line"><span class="string">// 第二种方式，简单配置标题栏，title就是标题属性,缺点就是不能动态配置，如果是公用一个文章详情页，那么就哈哈了，记得navigationOptions入参必须是对象，所以是这种形式&#123;navigation&#125;</span></span><br><span class="line"><span class="string">Login: &#123;</span></span><br><span class="line"><span class="string">  screen: index,</span></span><br><span class="line"><span class="string">  navigationOptions: (&#123; navigation &#125;) =&gt; (&#123;</span></span><br><span class="line"><span class="string">    title: '登录',</span></span><br><span class="line"><span class="string">  &#125;),</span></span><br><span class="line"><span class="string">&#125;,</span></span><br><span class="line"><span class="string">// 配置Index 开始</span></span><br><span class="line"><span class="string">Index: &#123;</span></span><br><span class="line"><span class="string">  screen: index,</span></span><br><span class="line"><span class="string">  navigationOptions: (&#123; navigation &#125;) =&gt; (&#123;</span></span><br><span class="line"><span class="string">    // 动态配置title,其实在Index.vue中 console.log(this.navigation)，你就很容易明白了,它包含以下方法和属性，</span></span><br><span class="line"><span class="string">    // Object: &#123;</span></span><br><span class="line"><span class="string">    //   "</span>addListener<span class="string">": [Function anonymous],</span></span><br><span class="line"><span class="string">    //   "</span>dispatch<span class="string">": [Function anonymous],</span></span><br><span class="line"><span class="string">    //   "</span>getParam<span class="string">": [Function getParam],</span></span><br><span class="line"><span class="string">    //   "</span>goBack<span class="string">": [Function goBack],</span></span><br><span class="line"><span class="string">    //   "</span>isFocused<span class="string">": [Function isFocused],</span></span><br><span class="line"><span class="string">    //   "</span>navigate<span class="string">": [Function navigate],</span></span><br><span class="line"><span class="string">    //   "</span>pop<span class="string">": [Function pop],</span></span><br><span class="line"><span class="string">    //   "</span>popToTop<span class="string">": [Function popToTop],</span></span><br><span class="line"><span class="string">    //   "</span>push<span class="string">": [Function push],</span></span><br><span class="line"><span class="string">    //   "</span>replace<span class="string">": [Function replace],</span></span><br><span class="line"><span class="string">    //   "</span>setParams<span class="string">": [Function setParams],</span></span><br><span class="line"><span class="string">    //   "</span>state<span class="string">": Object &#123;</span></span><br><span class="line"><span class="string">    //       "</span>key<span class="string">": "</span>id<span class="number">-1536840165621</span><span class="number">-0</span><span class="string">",</span></span><br><span class="line"><span class="string">    //       "</span>routeName<span class="string">": "</span>Index<span class="string">",</span></span><br><span class="line"><span class="string">    //     &#125;,</span></span><br><span class="line"><span class="string">    //   "</span>title<span class="string">": "</span>首页<span class="string">",</span></span><br><span class="line"><span class="string">    // &#125;</span></span><br><span class="line"><span class="string">    // navigation.getParam('title', '首页') 这句话的意思就是如果你在index.vue中有 		this.navigation.setParams(&#123;title:'xxx'&#125;),他就获取到xxx,否则默认值为首页</span></span><br><span class="line"><span class="string">    title: navigation.getParam('title', '首页'),</span></span><br><span class="line"><span class="string">    // 以下headaerRight是配置 右上角按钮的</span></span><br><span class="line"><span class="string">    headerRight: (</span></span><br><span class="line"><span class="string">      &lt;Button</span></span><br><span class="line"><span class="string">      // 这里和动态设置title就很类似了，设置title是把字符串传进来，这是则是把方法名传进来,默认值一定要给，因为刚进入这个界面会先获取默认方法，如果没有默认方法，会有一个大大的warning</span></span><br><span class="line"><span class="string">        onPress=&#123; navigation.getParam('buttonPress'),()=&gt;&#123;&#125;&#125;</span></span><br><span class="line"><span class="string">        // 动态设置按钮文本</span></span><br><span class="line"><span class="string">        title=&#123;navigation.getParam('buttonTitle', '同步屏幕')&#125;</span></span><br><span class="line"><span class="string">        // 一开始写成了白色，可把自己害惨了,因为标题栏也是白的</span></span><br><span class="line">        color="#333"</span><br><span class="line">      &gt;&lt;/Button&gt;</span><br><span class="line">    ),</span><br><span class="line">  &#125;),</span><br><span class="line">&#125;,</span><br><span class="line">     &#125;,</span><br><span class="line">  <span class="comment">// 配置Index结束</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 以下是全局配置</span></span><br><span class="line">  &#123;</span><br><span class="line">   <span class="comment">// 初始化头部</span></span><br><span class="line">   initialRouteName: <span class="string">'Index'</span>,</span><br><span class="line">   <span class="comment">// 全局标题栏样式配置，如果是复制到对应的路由配置中也是可以的，这时全局配置就不会对着那个页面生效</span></span><br><span class="line">    headerStyle: &#123;</span><br><span class="line">      backgroundColor: <span class="string">'#fff'</span>,</span><br><span class="line">   &#125;,</span><br><span class="line">     <span class="comment">// 页眉的淡色颜色</span></span><br><span class="line">    headerTintColor: <span class="string">'#333'</span>,</span><br><span class="line">    <span class="comment">// 字体样式</span></span><br><span class="line">    headerTitleStyle: &#123;</span><br><span class="line">      fontWeight: <span class="string">'bold'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 全局标题栏样式 结束 如果需要更多的配置可以参考：https://reactnavigation.org/docs/zh-Hans/stack-navigator.html#navigationoptions-used-by-stacknavigator</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">);</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  components: &#123;</span><br><span class="line">    <span class="string">'app-navigation'</span>: AppNavigation</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;style scoped&gt;</span></span><br><span class="line"><span class="regexp">.container &#123;</span></span><br><span class="line"><span class="regexp">  background-color: red;</span></span><br><span class="line"><span class="regexp">  width: 100%;</span></span><br><span class="line"><span class="regexp">  height: 100%;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">&lt;/</span>style&gt;</span><br></pre></td></tr></table></figure>
-<p> App.vue到此配置结束</p>
-<p><strong>Index.vue</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;view&gt;</span><br><span class="line">  &lt;<span class="regexp">/view&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line"> <span class="comment">// 在官网 https://vue-native.io/docs/vue-native-router.html#Moving-in-between-screens 有这么一段描述：</span></span><br><span class="line"> <span class="comment">// the navigation is available as prop within the child components.意思就是 导航在子组件中可用作prop。所以我们就通可以通过这个navigation来跳转路由，以及传递信息</span></span><br><span class="line"></span><br><span class="line">  props: &#123;</span><br><span class="line">    navigation: &#123;</span><br><span class="line">      type: <span class="built_in">Object</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    logout () &#123;</span><br><span class="line">      <span class="keyword">this</span>.navigation.replace(<span class="string">'Login'</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    _buttonPress()&#123;</span><br><span class="line">      alert(<span class="string">'aaa'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted () &#123;</span><br><span class="line">    <span class="comment">// 在此把我们的方法传给右上角的按钮</span></span><br><span class="line">    <span class="keyword">this</span>.navigation.setParams(&#123; <span class="attr">buttonPress</span>: <span class="keyword">this</span>._buttonPress &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;style scoped&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>style&gt;</span><br></pre></td></tr></table></figure>
-<p>至此，路由配置，导航栏设置结束，最后讲讲路由跳转；</p>
-<p>据我所知路由跳转有三种方式：</p>
-<p>1：this.navigation.navigate(“Home”); // 这种方式就我们vue中的push是一样的，会把上一个页面推入栈中，而且左上角就会有一个返回按钮；</p>
-<p>2：此时在新页面中this.navigation.goBack()即可返回就页面</p>
-<p>3：this.navigation.replace(“Home”); // 这种按字面理解则是新页面替换旧页面的意思，左上角不会产生返回按钮</p>
-<p>三种跳转方式结束；如果要传参的话则要多加一个入参，如：this.navigation.navigate(‘xx’,{name:xxx})</p>
-<p>4：更多导航配置可以查看<a href="https://reactnavigation.org/" target="_blank" rel="noopener">react-navigation</a></p>
-
+        
+          <a class="article-more-a" href="/2018/12/19/vue-native踩坑记录2/#more">more >></a>
+        
       
 
       
