@@ -6,20 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>vue-native踩坑记录3 | 以梦为马,以码编梦</title>
+  <title>Tag: yolo3 | 以梦为马,以码编梦</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一：点击事件">
-<meta name="keywords" content="vue-native app">
-<meta property="og:type" content="article">
-<meta property="og:title" content="vue-native踩坑记录3">
-<meta property="og:url" content="http://yoursite.com/2018/12/19/vue-native踩坑记录3/index.html">
+  <meta name="description" content="以梦为马,以码编梦">
+<meta property="og:type" content="website">
+<meta property="og:title" content="以梦为马,以码编梦">
+<meta property="og:url" content="http://yoursite.com/tags/yolo3/index.html">
 <meta property="og:site_name" content="以梦为马,以码编梦">
-<meta property="og:description" content="一：点击事件">
+<meta property="og:description" content="以梦为马,以码编梦">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-19T11:12:09.343Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vue-native踩坑记录3">
-<meta name="twitter:description" content="一：点击事件">
+<meta name="twitter:title" content="以梦为马,以码编梦">
+<meta name="twitter:description" content="以梦为马,以码编梦">
   
     <link rel="alternative" href="/atom.xml" title="以梦为马,以码编梦" type="application/atom+xml">
   
@@ -149,219 +147,71 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-vue-native踩坑记录3" class="article article-type-post " itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      vue-native踩坑记录3
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/12/20/yolo3-训练自己的数据集/" class="archive-article-date">
+  	<time datetime="2018-12-20T10:43:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/12/20/yolo3-训练自己的数据集/">yolo3-训练自己的数据集</a>
     </h1>
   
 
-        
-        <a href="/2018/12/19/vue-native踩坑记录3/" class="archive-article-date">
-  	<time datetime="2018-12-19T09:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一：点击事件"><a href="#一：点击事件" class="headerlink" title="一：点击事件"></a>一：点击事件</h3><a id="more"></a>
-<blockquote>
-<h3 id="View"><a href="#View" class="headerlink" title="View"></a><a href="https://vue-native.io/docs/basic-components.html#View" target="_blank" rel="noopener">View</a></h3><p>The most fundamental component for building a UI, View is a container that supports layout<br><code>View</code> is designed to be nested inside other views and can have 0 to many children of any type.</p>
-</blockquote>
-<p>构建UI的最基本组件是View，它是一个支持布局的容器，它<br><code>View</code>被设计为嵌套在其他视图中，并且可以包含0到多个任何类型的子元素</p>
-<blockquote>
-<h3 id="Text"><a href="#Text" class="headerlink" title="Text"></a><a href="https://vue-native.io/docs/basic-components.html#Text" target="_blank" rel="noopener">Text</a></h3><p>A Vue Native component for displaying text.</p>
-<p>Text supports nesting, styling, and touch handling.</p>
-</blockquote>
-<p>用于显示文本的Vue Native组件。文本支持嵌套，样式和触摸处理。</p>
-<p>由此可见，<strong>view</strong>标签不支持触摸处理，只作为支持布局的容器；而<strong>text</strong>标签是行内元素，如果需要添加点击事件的元素的是块状元素，就要使用以下标签</p>
-<blockquote>
-<h3 id="TouchableOpacity"><a href="#TouchableOpacity" class="headerlink" title="TouchableOpacity"></a><a href="https://vue-native.io/docs/basic-components.html#TouchableOpacity" target="_blank" rel="noopener">TouchableOpacity</a></h3><p>A wrapper for making views respond properly to touches. On press down, the opacity of the wrapped view is decreased, dimming it.</p>
-</blockquote>
-<p>用于使视图正确响应触摸的包装器。按下时，包裹视图的不透明度会降低，使其变暗</p>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;touchable-opacity :on-press=&quot;onPressButton&quot;&gt;</span><br><span class="line">      &lt;image</span><br><span class="line">        :style=&quot;&#123;alignItems: &apos;center&apos;, backgroundColor: &apos;#DDDDDD&apos;&#125;&quot;</span><br><span class="line">        :source=&quot;&#123;require(&apos;./myButton.png&apos;)&#125;&quot; </span><br><span class="line">      /&gt;</span><br><span class="line">    &lt;/touchable-opacity&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="二：事件传参"><a href="#二：事件传参" class="headerlink" title="二：事件传参"></a>二：事件传参</h3><p>主要分两类：</p>
-<p>第一类：例如事件触发时无回参的点击事件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;TouchableOpacity :on-press=&apos;()=&gt;&#123;checkProposal(item)&#125;&apos;&gt;&lt;/TouchableOpacity&gt;</span><br></pre></td></tr></table></figure>
-<p>第二类：例如事件触发时有回参的滚动监听事件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> &lt;ScrollView :on-scroll=&apos;(e)=&gt;&#123;scrollHandler(e)&#125;&apos;&gt;&lt;/ScrollView&gt;</span><br><span class="line"></span><br><span class="line">methods:&#123;</span><br><span class="line">    scrollHandler(e)&#123;</span><br><span class="line">		// 这样才能获取到数据，直接输入e时没有响应的，一开始我是懵逼的，后面用了Object.keys(e)查看有哪些值，然后试出来了</span><br><span class="line">		console.log(e.nativeEvent)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最后我发现到<a href="https://facebook.github.io/react-native/docs/getting-started" target="_blank" rel="noopener">react-native</a> 找到对应标签去查看它的方法就可以知道回参是什么格式 😂</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="https://raw.githubusercontent.com/xinyiPig/xinyipig.github.io/master/alipay.jpeg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="https://raw.githubusercontent.com/xinyiPig/xinyipig.github.io/master/wxpay.jpeg">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">vue-native app</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">yolo3</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/vue-native//" class="article-tag-list-link color1">vue-native</a>
+        			<a href="/categories/yolo3//" class="article-tag-list-link color1">yolo3</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/12/19/vue-native踩坑记录3/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          vue-native踩坑记录4 vuex整合、网络请求
-        
-      </div>
-    </a>
   
   
-    <a href="/2018/12/19/vue-native踩坑记录2/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">vue-native踩坑记录2</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -384,9 +234,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

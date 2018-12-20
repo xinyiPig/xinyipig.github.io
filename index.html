@@ -149,6 +149,216 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yolo3-训练自己的数据集" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/20/yolo3-训练自己的数据集/">yolo3-训练自己的数据集</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/20/yolo3-训练自己的数据集/" class="archive-article-date">
+  	<time datetime="2018-12-20T10:43:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h3><p>看完<a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">yolo3官网介绍</a>以及这篇给我明灯般指引的<a href="https://blog.csdn.net/ll_master/article/details/81392013" target="_blank" rel="noopener">csdn博客文章</a>后，结合自己在实际动手时遇到的问题，我决定重新理一下如何使用yolo3来训练自己的数据集(因为通过以上两篇文章来学习的，部分内容会和以上两篇文章重复)</p>
+<h3 id="1：下载yolo3"><a href="#1：下载yolo3" class="headerlink" title="1：下载yolo3"></a>1：下载yolo3</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/pjreddie/darknet cd darknet</span><br><span class="line"></span><br><span class="line">cd darknet</span><br><span class="line"></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>简单！</p>
+<p>就这三个命令，你就在<code>cfg/</code>子目录中拥有YOLO的配置文件</p>
+<p><strong>测试一下！</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 下载yolo3预先训练好的权重文件（我觉得权重文件是经过训练得出来的，可以给你接下来要检测的图片当做是判断依据的文件）</span><br><span class="line">wget https://pjreddie.com/media/files/yolov3.weights</span><br><span class="line">//  运行以下命令来检测图片</span><br><span class="line">./darknet detect cfg/yolov3.cfg yolov3.weights data/dog.jpg</span><br></pre></td></tr></table></figure>
+<p>在darknet文件内会有predictions.jpg生成，大概长这样</p>
+<p><img alt="yolo3-训练自己的数据集" src="https://pjreddie.com/media/image/Screen_Shot_2018-03-24_at_10.48.42_PM.png"></p>
+<h3 id="2：开始动手"><a href="#2：开始动手" class="headerlink" title="2：开始动手"></a>2：开始动手</h3><p>创建以下文件夹目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">darknet</span><br><span class="line">     --VOCdevkit</span><br><span class="line">         --VOC2018 #voc%s 这个%s最好是按照自己的数据集名称命名，为了以后区分自己数据集。</span><br><span class="line">              --Annotations # Annotations 放xml文件；</span><br><span class="line">              --ImageSets</span><br><span class="line">                   --Main # Main中放train.txt和test.txt</span><br><span class="line">              --JPEGImages # JPEGImages中放所有的图片(数据集)，图片名最好全是数字，如从1.jpg-1000.jpg,待会解释为啥要这么做</span><br></pre></td></tr></table></figure>
+<p>xml文件怎么来：根据自己划分的类别将数据集用 <strong>labelimg</strong>（去下载一个来用就好） 进行标注，保存后会生成与所标注图片文件名相同的xml文件</p>
+<p>train.txt和test.txt怎么来的：首先<strong>新建好train.txt和text.txt文件</strong>，train.txt里边存放的是需要被训练的图片名，text.txt里边存放的是验证训练结果的图片名；然后在darknet文件下运行<strong>python3 writeTxt.py</strong>即可在train.txt和text.txt中看到内容 </p>
+<p><span style="color:red"><strong>writeTxt.py</strong></span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> os <span class="keyword">import</span> listdir, getcwd</span><br><span class="line"><span class="keyword">from</span> os.path <span class="keyword">import</span> join</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">   	source_folder = <span class="string">'/Users/zzx/Desktop/project/darknet/VOCdevkit/VOC2018/JPEGImages/'</span></span><br><span class="line">    dest = <span class="string">'/Users/zzx/Desktop/project/darknet/VOCdevkit/VOC2018/ImageSets/Main/train.txt'</span></span><br><span class="line">    dest2 = <span class="string">'/Users/zzx/Desktop/project/darknet/VOCdevkit/VOC2018/ImageSets/Main/val.txt'</span></span><br><span class="line">    file_list=os.listdir(source_folder)       <span class="comment">#赋值图片所在文件夹的文件列表</span></span><br><span class="line">    train_file=open(dest,<span class="string">'a'</span>)                 <span class="comment">#打开文件</span></span><br><span class="line">    val_file=open(dest2,<span class="string">'a'</span>)                  <span class="comment">#打开文件</span></span><br><span class="line">    <span class="keyword">for</span> file_obj <span class="keyword">in</span> file_list:                <span class="comment">#访问文件列表中的每一个文件</span></span><br><span class="line">        file_path=os.path.join(source_folder,file_obj) </span><br><span class="line">        <span class="comment">#file_path保存每一个文件的完整路径</span></span><br><span class="line">        file_name,file_extend=os.path.splitext(file_obj)</span><br><span class="line">        <span class="comment">#file_name 保存文件的名字，file_extend保存文件扩展名</span></span><br><span class="line">       </span><br><span class="line">        file_num=int(file_name) </span><br><span class="line">        <span class="comment">#把每一个文件命str转换为 数字 int型 每一文件名字都是由四位数字组成的  如 0201 代表 201     高位补零  </span></span><br><span class="line">        <span class="comment"># 这里就解释一下为什么要用数字了，因为数据集里边要留10%左右的图片作为验证集，所以如果图片都是有序的数字，来到这一步判断就很方便了</span></span><br><span class="line">        <span class="keyword">if</span>(file_num&lt;<span class="number">150</span>):                     <span class="comment">#保留149个文件用于训练</span></span><br><span class="line">            <span class="comment">#print file_num</span></span><br><span class="line">            train_file.write(file_name+<span class="string">'\n'</span>)  <span class="comment">#用于训练前149个的图片路径保存在train.txt里面，结尾加回车换行</span></span><br><span class="line">        <span class="keyword">else</span> :</span><br><span class="line">            val_file.write(file_name+<span class="string">'\n'</span>)    <span class="comment">#其余的文件保存在val.txt里面</span></span><br><span class="line">    train_file.close()<span class="comment">#关闭文件</span></span><br><span class="line">	val_file.close()</span><br></pre></td></tr></table></figure>
+<p>在darknet文件夹下创建voc_label.py</p>
+<p><span style="color:red"><strong>voc_label.py</strong></span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> os <span class="keyword">import</span> listdir, getcwd</span><br><span class="line"><span class="keyword">from</span> os.path <span class="keyword">import</span> join</span><br><span class="line"> <span class="comment">#根据自己的需要修改，只要前后路径对应就行。</span></span><br><span class="line">sets=[(<span class="string">'2018'</span>, <span class="string">'train'</span>), (<span class="string">'2018'</span>, <span class="string">'test'</span>)]</span><br><span class="line"><span class="comment">#这是分类名，在xml文件中就是用这些分类来做标注的</span></span><br><span class="line">classes = [<span class="string">"m"</span>, <span class="string">"s"</span>,<span class="string">"l"</span>,<span class="string">"xl"</span>,<span class="string">"xxl"</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert</span><span class="params">(size, box)</span>:</span></span><br><span class="line">    dw = <span class="number">1.</span>/size[<span class="number">0</span>]</span><br><span class="line">    dh = <span class="number">1.</span>/size[<span class="number">1</span>]</span><br><span class="line">    x = (box[<span class="number">0</span>] + box[<span class="number">1</span>])/<span class="number">2.0</span></span><br><span class="line">    y = (box[<span class="number">2</span>] + box[<span class="number">3</span>])/<span class="number">2.0</span></span><br><span class="line">    w = box[<span class="number">1</span>] - box[<span class="number">0</span>]</span><br><span class="line">    h = box[<span class="number">3</span>] - box[<span class="number">2</span>]</span><br><span class="line">    x = x*dw</span><br><span class="line">    w = w*dw</span><br><span class="line">    y = y*dh</span><br><span class="line">    h = h*dh</span><br><span class="line">    <span class="keyword">return</span> (x,y,w,h)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert_annotation</span><span class="params">(year, image_id)</span>:</span></span><br><span class="line">    in_file = open(<span class="string">'VOCdevkit/VOC%s/Annotations/%s.xml'</span>%(year, image_id))</span><br><span class="line">    out_file = open(<span class="string">'VOCdevkit/VOC%s/labels/%s.txt'</span>%(year, image_id), <span class="string">'w'</span>)</span><br><span class="line">    tree=ET.parse(in_file)</span><br><span class="line">    root = tree.getroot()</span><br><span class="line">    size = root.find(<span class="string">'size'</span>)</span><br><span class="line">    w = int(size.find(<span class="string">'width'</span>).text)</span><br><span class="line">    h = int(size.find(<span class="string">'height'</span>).text)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> obj <span class="keyword">in</span> root.iter(<span class="string">'object'</span>):</span><br><span class="line">        difficult = obj.find(<span class="string">'difficult'</span>).text</span><br><span class="line">        cls = obj.find(<span class="string">'name'</span>).text</span><br><span class="line">        <span class="keyword">if</span> cls <span class="keyword">not</span> <span class="keyword">in</span> classes <span class="keyword">or</span> int(difficult) == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        cls_id = classes.index(cls)</span><br><span class="line">        xmlbox = obj.find(<span class="string">'bndbox'</span>)</span><br><span class="line">        b = (float(xmlbox.find(<span class="string">'xmin'</span>).text), float(xmlbox.find(<span class="string">'xmax'</span>).text), float(xmlbox.find(<span class="string">'ymin'</span>).text), float(xmlbox.find(<span class="string">'ymax'</span>).text))</span><br><span class="line">        bb = convert((w,h), b)</span><br><span class="line">        out_file.write(str(cls_id) + <span class="string">" "</span> + <span class="string">" "</span>.join([str(a) <span class="keyword">for</span> a <span class="keyword">in</span> bb]) + <span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">wd = getcwd()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> year, image_set <span class="keyword">in</span> sets:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">'VOCdevkit/VOC%s/labels/'</span>%(year)):</span><br><span class="line">        os.makedirs(<span class="string">'VOCdevkit/VOC%s/labels/'</span>%(year))</span><br><span class="line">    image_ids = open(<span class="string">'VOCdevkit/VOC%s/ImageSets/Main/%s.txt'</span>%(year, image_set)).read().strip().split()</span><br><span class="line">    list_file = open(<span class="string">'%s_%s.txt'</span>%(year, image_set), <span class="string">'w'</span>)</span><br><span class="line">    <span class="keyword">for</span> image_id <span class="keyword">in</span> image_ids:</span><br><span class="line">        <span class="comment"># 如果你这里配置了jpg;那么JPEGImages里边就全得是jpg,当然这里可以配置成全部格式自适应的</span></span><br><span class="line">        list_file.write(<span class="string">'%s/VOCdevkit/VOC%s/JPEGImages/%s.jpg\n'</span>%(wd, year, image_id))</span><br><span class="line">        convert_annotation(year, image_id)</span><br><span class="line">    list_file.close()</span><br></pre></td></tr></table></figure>
+<p>运行 以下代码即可在同级目录中看到2018_train.txt和2018_test.txt，文件内容都是指向图片路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 voc_label.py</span><br></pre></td></tr></table></figure>
+<h3 id="3：下载预训练模型"><a href="#3：下载预训练模型" class="headerlink" title="3：下载预训练模型"></a>3：下载预训练模型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// darknet 文件夹下</span><br><span class="line">wget https://pjreddie.com/media/files/darknet53.conv.74</span><br></pre></td></tr></table></figure>
+<p>这个是空白的训练模型，就是我们要这个模型来生成weights文件</p>
+<h3 id="4：创建cfg-voc2018-data"><a href="#4：创建cfg-voc2018-data" class="headerlink" title="4：创建cfg/voc2018.data"></a>4：创建cfg/voc2018.data</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">classes= 5 #classes为训练样本集的类别总数 </span><br><span class="line">train  = /Users/zzx/Desktop/project/darknet/2018_train.txt #train的路径为训练样本集所在的路径 </span><br><span class="line">valid  = /Users/zzx/Desktop/project/darknet/2018_test.txt #test的路径为验证样本集所在的路径 </span><br><span class="line">names = data/voc2018.names #names的路径为data/voc2018.names文件所在的路径 </span><br><span class="line">backup = backup #存放训练后生成的weights文件</span><br></pre></td></tr></table></figure>
+<h3 id="5：创建data-voc2018-names"><a href="#5：创建data-voc2018-names" class="headerlink" title="5：创建data/voc2018.names"></a>5：创建data/voc2018.names</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s</span><br><span class="line">m</span><br><span class="line">l</span><br><span class="line">xl</span><br><span class="line">xxl</span><br><span class="line">#这里就是我们之前的classes ,上面python文件中也要与之对应哈</span><br></pre></td></tr></table></figure>
+<h3 id="6：复制cfg-yolov3-voc-cfg并把副本改名为cfg-yolov3-voc2018-cfg"><a href="#6：复制cfg-yolov3-voc-cfg并把副本改名为cfg-yolov3-voc2018-cfg" class="headerlink" title="6：复制cfg/yolov3-voc.cfg并把副本改名为cfg/yolov3-voc2018.cfg"></a>6：复制<strong>cfg/yolov3-voc.cfg</strong>并把副本改名为cfg/yolov3-voc2018.cfg</h3><p>……             #省略号表示代码有所省略，请到cfg文件夹复制yolov3-voc.cfg并根据‘#———修改’标志完成yolo3-voc2018.cfg的配置</p>
+<p>也可以参考<a href="http://www.codeleading.com/article/7480106410/" target="_blank" rel="noopener">cfg的参数说明</a>，自己来配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">[net]</span><br><span class="line"># Testing</span><br><span class="line"># batch=1</span><br><span class="line"># subdivisions=1</span><br><span class="line"># Training</span><br><span class="line"> batch=64            </span><br><span class="line"> subdivisions=8    #---------------修改</span><br><span class="line"> max_batches = 5000 #-------------修改 根据自己需求来定迭代次数</span><br><span class="line">......            </span><br><span class="line">[convolutional]</span><br><span class="line">size=1</span><br><span class="line">stride=1</span><br><span class="line">pad=1</span><br><span class="line">filters=30        #---------------修改</span><br><span class="line">activation=linear</span><br><span class="line">[yolo]</span><br><span class="line">mask = 6,7,8</span><br><span class="line">anchors = 10,13,  16,30,  33,23,  30,61,  62,45,  59,119,  116,90,  156,198,  373,326</span><br><span class="line">classes=5        #---------------修改</span><br><span class="line">num=9</span><br><span class="line">jitter=.3</span><br><span class="line">ignore_thresh = .5</span><br><span class="line">truth_thresh = 1</span><br><span class="line">random=0            #---------------修改</span><br><span class="line">......</span><br><span class="line">[convolutional]</span><br><span class="line">size=1</span><br><span class="line">stride=1</span><br><span class="line">pad=1</span><br><span class="line">filters=30        #---------------修改</span><br><span class="line">activation=linear</span><br><span class="line"></span><br><span class="line">[yolo]</span><br><span class="line">mask = 3,4,5</span><br><span class="line">anchors = 10,13,  16,30,  33,23,  30,61,  62,45,  59,119,  116,90,  156,198,  373,326</span><br><span class="line">classes=5        #---------------修改</span><br><span class="line">num=9</span><br><span class="line">jitter=.3</span><br><span class="line">ignore_thresh = .5</span><br><span class="line">truth_thresh = 1</span><br><span class="line">random=0        #---------------修改</span><br><span class="line">......</span><br><span class="line">[convolutional]</span><br><span class="line">size=1</span><br><span class="line">stride=1</span><br><span class="line">pad=1</span><br><span class="line">filters=30        #---------------修改</span><br><span class="line">activation=linear</span><br><span class="line"></span><br><span class="line">[yolo]</span><br><span class="line">mask = 0,1,2</span><br><span class="line">anchors = 10,13,  16,30,  33,23,  30,61,  62,45,  59,119,  116,90,  156,198,  373,326</span><br><span class="line">classes=5        #---------------修改</span><br><span class="line">num=9</span><br><span class="line">jitter=.3</span><br><span class="line">ignore_thresh = .5</span><br><span class="line">truth_thresh = 1</span><br><span class="line">random=0        #---------------修改</span><br><span class="line">标记的地方需要修改，classes是你的分类数，filters=3*（classes+5），random=0即关闭多尺度训练</span><br></pre></td></tr></table></figure>
+<h3 id="7：开始训练"><a href="#7：开始训练" class="headerlink" title="7：开始训练"></a>7：开始训练</h3><p>darknet文件下运行以下代码</p>
+<p> 开启gpu训练模式，具体开启方法参考<a href="https://pjreddie.com/darknet/install/#cuda" target="_blank" rel="noopener">cuda</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./darknet detector train cfg/voc.data cfg/yolov3-voc.cfg darknet53.conv.74 -gpus 0,1,2,3 -dont_show</span><br></pre></td></tr></table></figure>
+<p>-dont_show 就是不显示每一步训练好以后的弹窗</p>
+<p>我的电脑没有自带nividia显卡，所以</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./darknet detector train cfg/voc.data cfg/yolov3-voc.cfg darknet53.conv.74</span><br></pre></td></tr></table></figure>
+<p>最后在backup文件下可以看到带有步数的weights文件，如步数为800，现在把它改名为voc2018-800.weights，方便自己记住是什么项目，训练了多少步</p>
+<h3 id="8：开始测试"><a href="#8：开始测试" class="headerlink" title="8：开始测试"></a>8：开始测试</h3><p>文章一开始的运行检测的代码是这样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./darknet detect cfg/yolov3.cfg yolov3.weights data/dog.jpg</span><br></pre></td></tr></table></figure>
+<p>现在我们就不能这样用了，因为它这是用了默认的voc.data文件，而我们需要用我们自己的voc.data 、yolov3.cfg和weights文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./darknet detector test  cfg/voc2018.data cfg/yolov3-voc2018.cfg backup/voc2018.weights  path to your photo</span><br></pre></td></tr></table></figure>
+<h3 id="9：结束咯"><a href="#9：结束咯" class="headerlink" title="9：结束咯"></a>9：结束咯</h3>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">yolo3</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/yolo3//" class="article-tag-list-link color1">yolo3</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/20/yolo3-训练自己的数据集/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vue-native踩坑记录4-vuex整合、网络请求" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/">vue-native踩坑记录4 vuex整合、网络请求</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/" class="archive-article-date">
+  	<time datetime="2018-12-19T12:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一：引入vuex"><a href="#一：引入vuex" class="headerlink" title="一：引入vuex"></a>一：引入vuex</h3><p>vue引入vuex</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> Vuex <span class="keyword">from</span> <span class="string">'vuex'</span></span><br><span class="line">Vue.use(Vuex)</span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  state: &#123;</span><br><span class="line">    count: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  mutations: &#123;</span><br><span class="line">    increment (state) &#123;</span><br><span class="line">      state.count++</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> store</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line"><span class="comment">//this.$store.xxx</span></span><br></pre></td></tr></table></figure>
+<p>vue-native 引入vuex</p>
+        
+          <a class="article-more-a" href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">vue-native app</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/vue-native//" class="article-tag-list-link color1">vue-native</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-vue-native踩坑记录3" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -207,95 +417,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/19/vue-native踩坑记录3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vue-native踩坑记录4-vuex整合、网络请求" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/">vue-native踩坑记录4 vuex整合、网络请求</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/" class="archive-article-date">
-  	<time datetime="2018-12-19T09:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一：引入vuex"><a href="#一：引入vuex" class="headerlink" title="一：引入vuex"></a>一：引入vuex</h3><p>vue引入vuex</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> Vuex <span class="keyword">from</span> <span class="string">'vuex'</span></span><br><span class="line">Vue.use(Vuex)</span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  state: &#123;</span><br><span class="line">    count: <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  mutations: &#123;</span><br><span class="line">    increment (state) &#123;</span><br><span class="line">      state.count++</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> store</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line"><span class="comment">//this.$store.xxx</span></span><br></pre></td></tr></table></figure>
-<p>vue-native 引入vuex</p>
-        
-          <a class="article-more-a" href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">vue-native app</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/vue-native//" class="article-tag-list-link color1">vue-native</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/19/vue-native踩坑记录4-vuex整合、网络请求/">展开全文 >></a>
         </p>
       
 
@@ -688,6 +809,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">vue-native app</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">yolo3</a>
               </li>
             
             <div class="clearfix"></div>
